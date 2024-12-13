@@ -19,7 +19,7 @@ VIDEOPLAYER = ['mpv']
 VIDEOPLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loudnorm']
 
 # constants used by the script. best not to touch these
-SCRIPT_ROOT = os.path.dirname(sys.argv[0])
+SCRIPT_ROOT = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 print("Starting Fauxble.")
 RANDOM_MESSAGES = ["\"smoking pot and programming camp, i don\'t give a shit\" - casket",
