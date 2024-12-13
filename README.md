@@ -8,6 +8,7 @@ A program to automatically alternate between playing videos from folders in a ma
 
 # Example Directory Tree:
 
+```
 Fauxble Root  
 |- Main  
 |  |- main1  
@@ -25,6 +26,7 @@ Fauxble Root
 |  |- intermediary3.mp4  
 |- fauxble.cmd  
 |- README.md
+```
 
 # To Close:
 1. Close the GUI window that opens upon launching the fauxble.pyw script.
