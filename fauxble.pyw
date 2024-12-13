@@ -3,6 +3,7 @@ and an intermediary folder and its subfolders'''
 
 import threading # for allowing fauxble mainloop to run alongside gui to control the mainloop
 import tkinter # for creating guis
+import tkinter.filedialog # for adding files to the queue
 import subprocess # for running applications with a great deal of control
 import random # for pseudorandomly choosing things
 import os
@@ -21,13 +22,15 @@ VIDEOPLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loudn
 # constants used by the script. best not to touch these
 SCRIPT_ROOT = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-print("Starting Fauxble.")
+#print("Starting Fauxble.")
 RANDOM_MESSAGES = ["\"smoking pot and programming camp, i don\'t give a shit\" - casket",
                   "\"fuck batch. me and my homies all hate batch\" - tekmyndaspy"]
 print(random.choice(RANDOM_MESSAGES))
 
+# globals used to communicate between different threads of the script
 FAUXBLE_ACTIVE = False
 VIDEOPLAYER_THREAD = None
+VIDEO_QUEUE = []
 
 def main_loop():
     '''loop that governs the playing of videos'''
@@ -38,13 +41,22 @@ def main_loop():
         # choose video directory
         if current_video_directory > len(VIDEO_DIRECTORIES) - 1:
             current_video_directory = 0
-        # choose video
-        os.chdir(SCRIPT_ROOT)
-        os.chdir(VIDEO_DIRECTORIES[current_video_directory])
-        # loop through directory and subdirectories until a video is chosen
-        file_not_chosen = True
+        file_chosen = False
         chosen_video = None
-        while file_not_chosen and chosen_video is None:
+        # Choose Video
+        # if the current video directory is the same as the first in the list (presumed main) and the video queue is not empty,
+        # set chosen video to first in queue and set file chosen to true
+        if VIDEO_DIRECTORIES[current_video_directory] == VIDEO_DIRECTORIES[0] and VIDEO_QUEUE:
+            chosen_video = VIDEO_QUEUE[0]
+            VIDEO_QUEUE.pop(0)
+            update_queue_text()
+            file_chosen = True
+        # if a video has not already been chosen, go to the current video directory
+        if not file_chosen:
+            os.chdir(SCRIPT_ROOT)
+            os.chdir(VIDEO_DIRECTORIES[current_video_directory])
+        # loop through directory and subdirectories until a video is chosen
+        while not file_chosen and chosen_video is None:
             files_in_directory = os.listdir()
             # if the working directory has no items,
             # return to the current video directory and restart loop
@@ -68,7 +80,7 @@ def main_loop():
                     continue
                 # if no previous checks fail, choose the file for playback
                 chosen_video = potential_item
-                file_not_chosen = False
+                file_chosen = False
         # play the chosen file
         VIDEOPLAYER_THREAD = subprocess.Popen(VIDEOPLAYER + VIDEOPLAYER_FLAGS + [str(chosen_video)],
                                                creationflags=subprocess.CREATE_NO_WINDOW)
@@ -92,7 +104,7 @@ def create_control_window():
     root.title("Fauxble")
     # frame containing general fauxble functions, like starting and stopping
     general_frame = tkinter.Frame(root)
-    general_frame.pack()
+    general_frame.pack(side='left')
     start_button = tkinter.Button(general_frame, text="Start Fauxble",
                                   command=lambda:[start_button.pack_forget(),
                                                   threading.Thread(target=main_loop).start(),
@@ -101,7 +113,21 @@ def create_control_window():
     stop_button = tkinter.Button(general_frame, text="Stop Fauxble",
                                  command=lambda:[stop_button.pack_forget(),
                                                  terminate_main_loop(), start_button.pack()])
+    secondary_frame = tkinter.Frame(root)
+    secondary_frame.pack(side='right')
+    global update_queue_text
+    def update_queue_text():
+        queue_text_label.config(text='\n'.join(VIDEO_QUEUE))
+    add_to_queue_button = tkinter.Button(secondary_frame, text = "Add to Queue", command=lambda:[VIDEO_QUEUE.extend(list(tkinter.filedialog.askopenfilenames())), update_queue_text()])
+    add_to_queue_button.pack()
+    print_queue_button = tkinter.Button(secondary_frame, text = "Print Queue", command=lambda:[update_queue_text()])
+    print_queue_button.pack()
+    queue_text_label = tkinter.Label(secondary_frame)
+    queue_text_label.pack()
+    clear_queue_button = tkinter.Button(secondary_frame, text = "Clear Queue", command=lambda:[VIDEO_QUEUE.clear(), update_queue_text()])
+    clear_queue_button.pack()
     root.mainloop()
 
 create_control_window()
 terminate_main_loop() # terminate the loop in case the gui is closed before the loop
+
