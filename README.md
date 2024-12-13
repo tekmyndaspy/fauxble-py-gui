@@ -29,7 +29,12 @@ Fauxble Root
 # To Close:
 1. Close the GUI window that opens upon launching the fauxble.pyw script.
 
+# Functionality Planned for the Future:
+- queue to place videos in before switching back to random selection
+- possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
+- include ways to change behavior on launch, such as with launch arguments (such as previous behavior where a gui is not required)
+  - in this case, add way to add videos to queue through script (is this even possible?)
+
 # Other Notes:
 fauxble.pyw is commented quite a bit. near the top of the file are variables to allow one to set the video player to be used and the file types that are accepted.  
 by default, fauxble uses mpv and accepts mp4, webm, and mkv files.  
-this is far from the end of this project. in the future i want to move more functionality to the gui, and possibly add functionality to change video folder order.  
