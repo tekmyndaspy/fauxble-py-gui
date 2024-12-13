@@ -36,6 +36,7 @@ Fauxble Root
 - possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
 - include ways to change behavior on launch, such as with launch arguments (such as previous behavior where a gui is not required)
   - in this case, add way to add videos to queue through script (is this even possible?)
+- add check for certain prefix of videos to stop them from playing
 
 # Other Notes:
 fauxble.pyw is commented quite a bit. near the top of the file are variables to allow one to set the video player to be used and the file types that are accepted.  
