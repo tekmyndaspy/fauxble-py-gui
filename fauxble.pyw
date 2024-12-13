@@ -9,9 +9,14 @@ import os
 import sys
 
 # user definable variables follow
+# defines the video directories to be used
 VIDEO_DIRECTORIES = ['Main', 'Intermediary']
+# defines the extensions allowed to be played
 ALLOWED_EXTENSIONS = ['.mp4', '.webm', '.mkv']
-VIDEOPLAYER = 'mpv --no-config --terminal=no --fullscreen --af=loudnorm'
+# defines the command for the videplayer to be used
+VIDEOPLAYER = ['mpv']
+# defines the flags used with the videoplayer
+VIDEOPLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loudnorm']
 
 # constants used by the script. best not to touch these
 SCRIPT_ROOT = os.path.dirname(sys.argv[0])
@@ -84,6 +89,7 @@ def terminate_main_loop():
 
 def create_control_window():
     '''create the window to control fauxble'''
+    # root of control window
     root = tkinter.Tk()
     root.title("Fauxble")
 
