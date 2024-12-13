@@ -38,7 +38,6 @@ def main_loop():
         # choose video directory
         if current_video_directory > len(VIDEO_DIRECTORIES) - 1:
             current_video_directory = 0
-
         # choose video
         os.chdir(SCRIPT_ROOT)
         os.chdir(VIDEO_DIRECTORIES[current_video_directory])
@@ -91,7 +90,6 @@ def create_control_window():
     # root of control window
     root = tkinter.Tk()
     root.title("Fauxble")
-
     # frame containing general fauxble functions, like starting and stopping
     general_frame = tkinter.Frame(root)
     general_frame.pack()
@@ -103,7 +101,6 @@ def create_control_window():
     stop_button = tkinter.Button(general_frame, text="Stop Fauxble",
                                  command=lambda:[stop_button.pack_forget(),
                                                  terminate_main_loop(), start_button.pack()])
-
     root.mainloop()
 
 create_control_window()
