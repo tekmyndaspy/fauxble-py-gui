@@ -26,15 +26,15 @@ RANDOM_MESSAGES = ["\"smoking pot and programming camp, i don\'t give a shit\" -
                   "\"fuck batch. me and my homies all hate batch\" - tekmyndaspy"]
 print(random.choice(RANDOM_MESSAGES))
 
-fauxble_active = False
-videoplayer_thread = None
+FAUXBLE_ACTIVE = False
+VIDEOPLAYER_THREAD = None
 
 def main_loop():
     '''loop that governs the playing of videos'''
-    global fauxble_active, videoplayer_thread
-    fauxble_active = True
+    global FAUXBLE_ACTIVE, VIDEOPLAYER_THREAD
+    FAUXBLE_ACTIVE = True
     current_video_directory = 0
-    while fauxble_active:
+    while FAUXBLE_ACTIVE:
         # choose video directory
         if current_video_directory > len(VIDEO_DIRECTORIES) - 1:
             current_video_directory = 0
@@ -71,20 +71,19 @@ def main_loop():
                 chosen_video = potential_item
                 file_not_chosen = False
         # play the chosen file
-        videoplayer_thread = subprocess.Popen(['mpv', '--no-config', '--terminal=no'] +
-                                               [chosen_video],
+        VIDEOPLAYER_THREAD = subprocess.Popen(VIDEOPLAYER + VIDEOPLAYER_FLAGS + [str(chosen_video)],
                                                creationflags=subprocess.CREATE_NO_WINDOW)
-        videoplayer_thread.wait()
+        VIDEOPLAYER_THREAD.wait()
         # go to next video directory in VIDEO_DIRECTORIES
         current_video_directory += 1
 
 def terminate_main_loop():
     '''set the loop to inactive, thus ensuring the thread ends, 
     killing the thread, and kill any mpv windows left over'''
-    global fauxble_active
-    fauxble_active = False
+    global FAUXBLE_ACTIVE
+    FAUXBLE_ACTIVE = False
     #os.system("TASKKILL /PID " + str(MPV.pid) + " /T")
-    subprocess.Popen(['TASKKILL', '/PID', str(videoplayer_thread.pid), '/T', '/F'],
+    subprocess.Popen(['TASKKILL', '/PID', str(VIDEOPLAYER_THREAD.pid), '/T', '/F'],
                      creationflags=subprocess.CREATE_NO_WINDOW)
 
 def create_control_window():
