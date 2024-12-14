@@ -32,7 +32,6 @@ Fauxble Root
 1. Close the GUI window that opens upon launching the fauxble.pyw script.
 
 # Functionality Planned for the Future:
-- queue to place videos in before switching back to random selection
 - possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
 - include ways to change behavior on launch, such as with launch arguments (such as previous behavior where a gui is not required)
   - in this case, add way to add videos to queue through script (is this even possible?)
