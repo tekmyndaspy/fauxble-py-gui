@@ -31,6 +31,10 @@ print(random.choice(RANDOM_MESSAGES))
 FAUXBLE_ACTIVE = False
 VIDEOPLAYER_THREAD = None
 VIDEO_QUEUE = []
+QUEUE_TEXT_LABEL = None
+def update_queue_text():
+    '''update queue text label in gui'''
+    QUEUE_TEXT_LABEL.config(text='\n'.join(VIDEO_QUEUE))
 
 def main_loop():
     '''loop that governs the playing of videos'''
@@ -44,7 +48,8 @@ def main_loop():
         file_chosen = False
         chosen_video = None
         # Choose Video
-        # if the current video directory is the same as the first in the list (presumed main) and the video queue is not empty,
+        # if the current video directory is the same as the first in the list (presumed main)
+        # and the video queue is not empty,
         # set chosen video to first in queue and set file chosen to true
         if VIDEO_DIRECTORIES[current_video_directory] == VIDEO_DIRECTORIES[0] and VIDEO_QUEUE:
             chosen_video = VIDEO_QUEUE[0]
@@ -101,33 +106,39 @@ def create_control_window():
     '''create the window to control fauxble'''
     # root of control window
     root = tkinter.Tk()
-    root.title("Fauxble")
+    root.title("Fauxble Control")
     # frame containing general fauxble functions, like starting and stopping
     general_frame = tkinter.Frame(root)
-    general_frame.pack(side='left')
+    general_frame.grid(column=0, row=0)
     start_button = tkinter.Button(general_frame, text="Start Fauxble",
-                                  command=lambda:[start_button.pack_forget(),
+                                  command=lambda:[start_button.grid_forget(),
                                                   threading.Thread(target=main_loop).start(),
-                                                  stop_button.pack()])
-    start_button.pack()
+                                                  stop_button.grid(column=0, row=0)])
+    start_button.grid(column=0, row=0)
     stop_button = tkinter.Button(general_frame, text="Stop Fauxble",
-                                 command=lambda:[stop_button.pack_forget(),
-                                                 terminate_main_loop(), start_button.pack()])
+                                 command=lambda:[stop_button.grid_forget(),
+                                                 terminate_main_loop(),
+                                                 start_button.grid(column=0, row=0)])
+    # frame containing secondary functions, like adding videos to the queue
     secondary_frame = tkinter.Frame(root)
-    secondary_frame.pack(side='right')
-    global update_queue_text
-    def update_queue_text():
-        queue_text_label.config(text='\n'.join(VIDEO_QUEUE))
-    add_to_queue_button = tkinter.Button(secondary_frame, text = "Add to Queue", command=lambda:[VIDEO_QUEUE.extend(list(tkinter.filedialog.askopenfilenames())), update_queue_text()])
-    add_to_queue_button.pack()
-    print_queue_button = tkinter.Button(secondary_frame, text = "Print Queue", command=lambda:[update_queue_text()])
-    print_queue_button.pack()
-    queue_text_label = tkinter.Label(secondary_frame)
-    queue_text_label.pack()
-    clear_queue_button = tkinter.Button(secondary_frame, text = "Clear Queue", command=lambda:[VIDEO_QUEUE.clear(), update_queue_text()])
-    clear_queue_button.pack()
+    secondary_frame.grid(column=1, row=0)
+    add_to_queue_button = tkinter.Button(secondary_frame, text = "Add to Queue",
+                                         command=lambda:[VIDEO_QUEUE.extend(list(
+                                             tkinter.filedialog.askopenfilenames())),
+                                                         update_queue_text()])
+    add_to_queue_button.grid(column=0, row=0)
+    clear_queue_button = tkinter.Button(secondary_frame, text = "Clear Queue",
+                                        command=lambda:[VIDEO_QUEUE.clear(), update_queue_text()])
+    clear_queue_button.grid(column=0, row=1)
+    # frame containing information about the queue
+    queue_area_frame = tkinter.Frame(root)
+    queue_area_frame.grid(column=2, row=0)
+    queue_area_label = tkinter.Label(queue_area_frame, text="Current Queue")
+    queue_area_label.grid(column=0, row=0)
+    global QUEUE_TEXT_LABEL
+    QUEUE_TEXT_LABEL = tkinter.Label(queue_area_frame)
+    QUEUE_TEXT_LABEL.grid(column=0, row=1)
     root.mainloop()
 
 create_control_window()
 terminate_main_loop() # terminate the loop in case the gui is closed before the loop
-
