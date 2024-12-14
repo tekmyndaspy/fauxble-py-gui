@@ -141,10 +141,10 @@ def create_control_window():
                                           command=lambda:[VIDEO_DIRECTORY_CYCLE.clear(),
                                                           VIDEO_DIRECTORY_CYCLE.extend(
                                                               tkinter.simpledialog.askstring(
-                                                                  title="Change Video Directory Cycle",
-                                                                  prompt="What do you want the new video directory cycle to be? Separate each entry with a space.")
+                                                                  title="Change Video Directory Cycle", # pylint: disable=line-too-long
+                                                                  prompt="What do you want the new video directory cycle to be? Separate each entry with a space.") # pylint: disable=line-too-long
                                                                   .split()),
-                                                                  update_video_directory_cycle_text()])
+                                                                  update_video_directory_cycle_text()]) # pylint: disable=line-too-long
     vid_dir_cycle_button.grid(column=0, row=2)
     # frame containing information about certain variables
     variable_area_frame = tkinter.Frame(root)
