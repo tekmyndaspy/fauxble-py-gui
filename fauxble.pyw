@@ -10,8 +10,7 @@ import os
 import sys
 
 # user definable variables follow
-# defines the video directories to be used
-VIDEO_DIRECTORIES = ['Main', 'Intermediary']
+
 # defines the extensions allowed to be played
 ALLOWED_EXTENSIONS = ['.mp4', '.webm', '.mkv']
 # defines the command for the videplayer to be used
@@ -31,10 +30,15 @@ print(random.choice(RANDOM_MESSAGES))
 FAUXBLE_ACTIVE = False
 VIDEOPLAYER_THREAD = None
 VIDEO_QUEUE = []
-QUEUE_TEXT_LABEL = None
+QUEUE_TEXT = None
 def update_queue_text():
     '''update queue text label in gui'''
-    QUEUE_TEXT_LABEL.config(text='\n'.join(VIDEO_QUEUE))
+    QUEUE_TEXT.config(text='\n'.join(VIDEO_QUEUE))
+VIDEO_DIRECTORY_CYCLE = ['Main', 'Intermediary']
+VIDEO_DIRECTORY_CYCLE_TEXT = None
+def update_video_directory_cycle_text():
+    '''update video directory cycle text in gui'''
+    VIDEO_DIRECTORY_CYCLE_TEXT.config(text=str(VIDEO_DIRECTORY_CYCLE))
 
 def main_loop():
     '''loop that governs the playing of videos'''
@@ -43,7 +47,7 @@ def main_loop():
     current_video_directory = 0
     while FAUXBLE_ACTIVE:
         # choose video directory
-        if current_video_directory > len(VIDEO_DIRECTORIES) - 1:
+        if current_video_directory > len(VIDEO_DIRECTORY_CYCLE) - 1:
             current_video_directory = 0
         file_chosen = False
         chosen_video = None
@@ -51,7 +55,7 @@ def main_loop():
         # if the current video directory is the same as the first in the list (presumed main)
         # and the video queue is not empty,
         # set chosen video to first in queue and set file chosen to true
-        if VIDEO_DIRECTORIES[current_video_directory] == VIDEO_DIRECTORIES[0] and VIDEO_QUEUE:
+        if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0] and VIDEO_QUEUE: # pylint: disable=line-too-long
             chosen_video = VIDEO_QUEUE[0]
             VIDEO_QUEUE.pop(0)
             update_queue_text()
@@ -59,7 +63,7 @@ def main_loop():
         # if a video has not already been chosen, go to the current video directory
         if not file_chosen:
             os.chdir(SCRIPT_ROOT)
-            os.chdir(VIDEO_DIRECTORIES[current_video_directory])
+            os.chdir(VIDEO_DIRECTORY_CYCLE[current_video_directory])
         # loop through directory and subdirectories until a video is chosen
         while not file_chosen and chosen_video is None:
             files_in_directory = os.listdir()
@@ -67,7 +71,7 @@ def main_loop():
             # return to the current video directory and restart loop
             if not files_in_directory:
                 os.chdir(SCRIPT_ROOT)
-                os.chdir(VIDEO_DIRECTORIES[current_video_directory])
+                os.chdir(VIDEO_DIRECTORY_CYCLE[current_video_directory])
                 continue
             # select random item in working directory for review
             potential_item = random.choice(files_in_directory)
@@ -81,7 +85,7 @@ def main_loop():
                 # return to the current video directory and restart loop
                 if os.path.splitext(potential_item)[-1].lower() not in ALLOWED_EXTENSIONS:
                     os.chdir(SCRIPT_ROOT)
-                    os.chdir(VIDEO_DIRECTORIES[current_video_directory])
+                    os.chdir(VIDEO_DIRECTORY_CYCLE[current_video_directory])
                     continue
                 # if no previous checks fail, choose the file for playback
                 chosen_video = potential_item
@@ -122,22 +126,42 @@ def create_control_window():
     # frame containing secondary functions, like adding videos to the queue
     secondary_frame = tkinter.Frame(root)
     secondary_frame.grid(column=1, row=0)
+    # queue functionality
     add_to_queue_button = tkinter.Button(secondary_frame, text = "Add to Queue",
-                                         command=lambda:[VIDEO_QUEUE.extend(list(
-                                             tkinter.filedialog.askopenfilenames())),
-                                                         update_queue_text()])
+                                         command=lambda:[VIDEO_QUEUE.extend(
+                                             list(tkinter.filedialog.askopenfilenames(
+                                                 parent=root,initialdir=SCRIPT_ROOT))),
+                                                 update_queue_text()])
     add_to_queue_button.grid(column=0, row=0)
     clear_queue_button = tkinter.Button(secondary_frame, text = "Clear Queue",
                                         command=lambda:[VIDEO_QUEUE.clear(), update_queue_text()])
     clear_queue_button.grid(column=0, row=1)
-    # frame containing information about the queue
-    queue_area_frame = tkinter.Frame(root)
-    queue_area_frame.grid(column=2, row=0)
-    queue_area_label = tkinter.Label(queue_area_frame, text="Current Queue")
-    queue_area_label.grid(column=0, row=0)
-    global QUEUE_TEXT_LABEL
-    QUEUE_TEXT_LABEL = tkinter.Label(queue_area_frame)
-    QUEUE_TEXT_LABEL.grid(column=0, row=1)
+    # video directory cycle functionality
+    vid_dir_cycle_button = tkinter.Button(secondary_frame, text = "Change Video Directory Cycle",
+                                          command=lambda:[VIDEO_DIRECTORY_CYCLE.clear(),
+                                                          VIDEO_DIRECTORY_CYCLE.extend(
+                                                              tkinter.simpledialog.askstring(
+                                                                  title="Change Video Directory Cycle",
+                                                                  prompt="What do you want the new video directory cycle to be? Separate each entry with a space.")
+                                                                  .split()),
+                                                                  update_video_directory_cycle_text()])
+    vid_dir_cycle_button.grid(column=0, row=2)
+    # frame containing information about certain variables
+    variable_area_frame = tkinter.Frame(root)
+    variable_area_frame.grid(column=2, row=0)
+    # queue
+    queue_label = tkinter.Label(variable_area_frame, text="Current Queue")
+    queue_label.grid(column=0, row=0)
+    global QUEUE_TEXT
+    QUEUE_TEXT = tkinter.Label(variable_area_frame)
+    QUEUE_TEXT.grid(column=0, row=1)
+    # video directory cycle
+    video_directory_cycle_label = tkinter.Label(variable_area_frame, text="Video Directory Cycle")
+    video_directory_cycle_label.grid(column=0, row=2)
+    global VIDEO_DIRECTORY_CYCLE_TEXT
+    VIDEO_DIRECTORY_CYCLE_TEXT = tkinter.Label(variable_area_frame)
+    update_video_directory_cycle_text()
+    VIDEO_DIRECTORY_CYCLE_TEXT.grid(column=0, row=3)
     root.mainloop()
 
 create_control_window()
