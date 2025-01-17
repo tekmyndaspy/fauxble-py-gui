@@ -40,3 +40,6 @@ Fauxble Root
 # Other Notes:
 fauxble.pyw is commented quite a bit. near the top of the file are variables to allow one to set the video player to be used and the file types that are accepted.  
 by default, fauxble uses mpv and accepts mp4, webm, and mkv files.  
+
+# To Do List:
+"The way to shorten the time between videos would probably just be to run the logic for deciding the next filepath when a file starts playing instead of when a file finishes, that way the program simply has to wait for the current file to end and then it can instantly open the next one instead of running the logic to decide what to play next at that exact moment."
