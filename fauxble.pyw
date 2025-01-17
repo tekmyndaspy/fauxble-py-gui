@@ -1,5 +1,4 @@
-'''an application to alternate between playing random videos from a main folder and its subfolders 
-and an intermediary folder and its subfolders'''
+# an application to alternate between playing random videos from a main folder and its subfolders and an intermediary folder and its subfolders
 
 import threading # for allowing fauxble mainloop to run alongside gui to control the mainloop
 import tkinter # for creating guis
