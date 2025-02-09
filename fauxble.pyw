@@ -97,7 +97,8 @@ def main_loop():
         VIDEOPLAYER_THREAD.wait()
         if len(recently_played_videos) > 11:
             del recently_played_videos [0:len(recently_played_videos) - VIDEOS_UNTIL_REPLAY]
-        recently_played_videos.append(os.path.abspath(chosen_video))
+        if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0]:
+            recently_played_videos.append(os.path.abspath(chosen_video))
         # go to next video directory in VIDEO_DIRECTORIES
         current_video_directory += 1
 
