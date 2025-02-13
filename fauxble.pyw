@@ -107,9 +107,13 @@ def main_loop():
         else:
             chosen_video = get_random_file(VIDEO_DIRECTORY_CYCLE[current_video_directory], ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS)
 
-        # play the chosen video, waiting until the process ends to continue
-        VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [chosen_video], creationflags=subprocess.CREATE_NO_WINDOW)
-        VIDEO_PLAYER_THREAD.wait()
+        # if there is an active video thread, wait until it ends to continue
+        if VIDEO_PLAYER_THREAD:
+            VIDEO_PLAYER_THREAD.wait()
+
+        # if fauxble is active, play the chosen video
+        if FAUXBLE_ACTIVE:
+            VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [chosen_video], creationflags=subprocess.CREATE_NO_WINDOW)
 
         # if the video directory is the same as the first in the video directory, 
         # add the last played video to the recently played videos
