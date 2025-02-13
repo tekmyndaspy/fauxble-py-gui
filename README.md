@@ -1,10 +1,15 @@
 # fauxble-py
-A program to automatically alternate between playing videos from folders in a main folder and videos in an intermediary folder.
+A program to automatically alternate between playing videos from folders in a main folder and videos in an intermediary folder
 
 # To Use:
-1. Place main video files in a folder named 'Main' or subfolders of the previously mentioned 'Main' folder.
-2. Place intermediary video files in a folder named 'Intermediary' or subfolders of the previously mentioned 'Intermediary' folder.
-4. Run fauxble.pyw.
+1. Place main video files in a folder named 'Main' or subfolders of the previously mentioned 'Main' folder
+2. Place intermediary video files in a folder named 'Intermediary' or subfolders of the previously mentioned 'Intermediary' folder
+4. Run fauxble.pyw
+
+# Optional Actions:
+- You can create a file fauxble_settings.py which may contain variables and values to be used by fauxble.pyw
+  - You should be careful to only use variables spcified in the "fauxble user-definable settings" section in fauxble.pyw, and only in a similar format
+  - The benefit of using the fauxble_settings.py file as opposed to changing the settings in the main file is that they will not be wiped out upon updating fauxble
 
 # Example Directory Tree:
 
@@ -24,12 +29,13 @@ Fauxble Root
 |  |- intermediary1.mp4  
 |  |- intermediary2.mp4  
 |  |- intermediary3.mp4  
-|- fauxble.cmd  
+|- fauxble.pyw
+|- fauxble_settings.py  
 |- README.md
 ```
 
 # To Close:
-1. Close the GUI window that opens upon launching the fauxble.pyw script.
+1. Close the GUI window that opens upon launching the fauxble.pyw script
 
 # Functionality Planned for the Future:
 - possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
@@ -38,8 +44,8 @@ Fauxble Root
 - add check for certain prefix of videos to stop them from playing
 
 # Other Notes:
-fauxble.pyw is commented quite a bit. near the top of the file are variables to allow one to set the video player to be used and the file types that are accepted.  
-by default, fauxble uses mpv and accepts mp4, webm, and mkv files.  
+fauxble.pyw is commented quite a bit. near the top of the file are variables to allow one to set the video player to be used and the file types that are accepted
+by default, fauxble uses mpv and accepts mp4, webm, and mkv files
 
 # To Do List:
 "The way to shorten the time between videos would probably just be to run the logic for deciding the next filepath when a file starts playing instead of when a file finishes, that way the program simply has to wait for the current file to end and then it can instantly open the next one instead of running the logic to decide what to play next at that exact moment."

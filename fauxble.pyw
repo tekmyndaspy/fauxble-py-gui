@@ -11,7 +11,7 @@ import tkinter
 import threading
 import tkinter.filedialog
 
-# fauxble user-definable settings
+# fauxble default settings
 # it is recommended to use a separate fauxble_settings.py file within the same 
 # directory as this file if you wish to change these settings
 # these settings will be set back to the defaults upon updating, as this file will be overwritten
