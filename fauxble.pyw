@@ -36,7 +36,9 @@ VIDEO_PLAYER_THREAD = None
 FAUXBLE_ACTIVE = False
 QUEUE = []
 QUEUE_TEXT = ""
-VIDEO_DIRECTORY_CYCLE_TEXT = ""
+VIDEO_DIRECTORY_CYCLE_TEXT = None
+RECENTLY_PLAYED_VIDEOS = []
+RECENTLY_PLAYED_VIDEOS_TEXT = None
 
 def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
     '''
@@ -87,10 +89,9 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
 
 def main_loop():
     '''loop that governs how videos are chosen and played'''
-    global FAUXBLE_ACTIVE, VIDEO_PLAYER_THREAD
+    global FAUXBLE_ACTIVE, VIDEO_PLAYER_THREAD, RECENTLY_PLAYED_VIDEOS
     # set initial values and begin constantly running loop
     current_video_directory = 0
-    recently_played_videos = []
     FAUXBLE_ACTIVE = True
     while FAUXBLE_ACTIVE:
         # if the video directory index is outside the list range, set it to the beginnning
@@ -104,24 +105,26 @@ def main_loop():
             QUEUE.pop(0)
             update_queue_text()
         else:
-            chosen_video = get_random_file(VIDEO_DIRECTORY_CYCLE[current_video_directory], ALLOWED_EXTENSIONS, recently_played_videos)
+            chosen_video = get_random_file(VIDEO_DIRECTORY_CYCLE[current_video_directory], ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS)
 
         # play the chosen video, waiting until the process ends to continue
         VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [chosen_video], creationflags=subprocess.CREATE_NO_WINDOW)
         VIDEO_PLAYER_THREAD.wait()
-        
+
         # if the video directory is the same as the first in the video directory, 
         # add the last played video to the recently played videos
         if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0]:
-            recently_played_videos.append(os.path.abspath(chosen_video))
-        
-        # add one to the video directory index
-        current_video_directory += 1
+            RECENTLY_PLAYED_VIDEOS.append(os.path.abspath(chosen_video))
+            update_recently_played_videos_text()
 
         # if the number of videos is greater than acceptable in the recently played videos list
         # remove enough videos from the list until it is within an acceptable range
-        if len(recently_played_videos) > VIDEOS_UNTIL_REPLAY - 1:
-            del recently_played_videos[0:len(recently_played_videos) - VIDEOS_UNTIL_REPLAY]
+        if len(RECENTLY_PLAYED_VIDEOS) > VIDEOS_UNTIL_REPLAY - 1:
+            del RECENTLY_PLAYED_VIDEOS[0:len(RECENTLY_PLAYED_VIDEOS) - VIDEOS_UNTIL_REPLAY]
+            update_recently_played_videos_text()
+
+        # add one to the video directory index
+        current_video_directory += 1
 
 def terminate_main_loop():
     '''kill the thread and kill any mpv windows left over'''
@@ -134,7 +137,10 @@ def update_queue_text():
     QUEUE_TEXT.config(text='\n'.join(QUEUE))
 
 def update_video_directory_cycle_text():
-    VIDEO_DIRECTORY_CYCLE_TEXT.config(text=str(VIDEO_DIRECTORY_CYCLE))
+    VIDEO_DIRECTORY_CYCLE_TEXT.config(text=', '.join(VIDEO_DIRECTORY_CYCLE))
+
+def update_recently_played_videos_text():
+    RECENTLY_PLAYED_VIDEOS_TEXT.config(text='\n'.join(RECENTLY_PLAYED_VIDEOS[-5:][::-1]))
 
 def create_control_panel():
     '''create the window to control fauxble'''
@@ -159,8 +165,11 @@ def create_control_panel():
     clear_queue_button = tkinter.Button(secondary_frame, text="Clear Queue", command=lambda:[QUEUE.clear(), update_queue_text()])
     clear_queue_button.grid(column=0, row=1)
     # video directory cycle functionality
-    video_directory_cycle_button = tkinter.Button(secondary_frame, text = "Change Video Directory Cycle", command=lambda:[VIDEO_DIRECTORY_CYCLE.clear(), VIDEO_DIRECTORY_CYCLE.extend(tkinter.simpledialog.askstring(title="Change Video Directory Cycle",prompt="What do you want the new video directory cycle to be? Separate each entry with a \'>\'.").split('>')),update_video_directory_cycle_text()])
-    video_directory_cycle_button.grid(column=0, row=2)
+    change_video_directory_cycle_button = tkinter.Button(secondary_frame, text = "Change Video Directory Cycle", command=lambda:[VIDEO_DIRECTORY_CYCLE.clear(), VIDEO_DIRECTORY_CYCLE.extend(tkinter.simpledialog.askstring(title="Change Video Directory Cycle",prompt="What do you want the new video directory cycle to be? Separate each entry with a \'>\'.").split('>')),update_video_directory_cycle_text()])
+    change_video_directory_cycle_button.grid(column=0, row=2)
+    # recently played videos functionality
+    clear_recently_played_videos_button = tkinter.Button(secondary_frame, text="Clear Recently Played Videos", command=lambda:[RECENTLY_PLAYED_VIDEOS.clear(), update_recently_played_videos_text()])
+    clear_recently_played_videos_button.grid(column=0, row=3)
 
     # frame containing information about certain variables
     information_frame = tkinter.Frame(root)
@@ -179,6 +188,13 @@ def create_control_panel():
     VIDEO_DIRECTORY_CYCLE_TEXT = tkinter.Label(information_frame)
     update_video_directory_cycle_text()
     VIDEO_DIRECTORY_CYCLE_TEXT.grid(column=0, row=3)
+    # recently played videos information
+    recently_played_videos_label = tkinter.Label(information_frame, text="Recently Played Videos")
+    recently_played_videos_label.grid(column=0, row=4)
+    global RECENTLY_PLAYED_VIDEOS_TEXT
+    RECENTLY_PLAYED_VIDEOS_TEXT = tkinter.Label(information_frame)
+    update_recently_played_videos_text()
+    RECENTLY_PLAYED_VIDEOS_TEXT.grid(column=0, row=5)
 
     root.mainloop()
 
