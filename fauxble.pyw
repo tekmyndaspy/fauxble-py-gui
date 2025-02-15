@@ -104,7 +104,7 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
         # if the file is not in allowed_extensions, return to the video directory and restart the loop, 
         # otherwise carry on
         if os.path.splitext(potential_item)[-1].lower() not in allowed_extensions:
-            general_logger.info(potential_item + ' extension not in ' + allowed_extensions + '. restarting from ' + directory + '.')
+            general_logger.info(potential_item + ' extension not in ' + ','.join(allowed_extensions) + '. restarting from ' + directory + '.')
             os.chdir(directory)
             continue
         # if no previous checks fail, return the file
