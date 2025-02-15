@@ -19,12 +19,12 @@ general_logger = logging.getLogger('general_logger')
 # general_log_handle = logging.FileHandler('fauxble.log', encoding='utf-8')
 # general_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
 # general_logger.addHandler(general_log_handle)
-# general_logger.setLevel(logging.CRITICAL)
+# general_logger.setLevel(logging.WARNING)
 
 video_logger = logging.getLogger('video_logger')
-# video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
-# video_logger.addHandler(video_log_handle)
-# video_logger.setLevel(logging.CRITICAL)
+#video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
+#video_logger.addHandler(video_log_handle)
+#video_logger.setLevel(logging.INFO)
 
 # fauxble default settings
 # it is recommended to use a separate fauxble_settings.py file within the same 
