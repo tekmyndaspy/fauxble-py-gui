@@ -49,9 +49,8 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
     a list of allowed extensions, such as ['.mp4', '.webm', '.mkv'],
     a list of disallowed files, such as ['one.mp4','two.mp4','three.mp4']
     '''
-    
-    video_directory = os.path.join(SCRIPT_ROOT, directory)
-    os.chdir(video_directory)
+
+    os.chdir(directory)
 
     # loop through directory
     file_is_chosen = False
@@ -60,7 +59,7 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
         # if the working directory has no items, return to the video directory and restart the loop, 
         # otherwise carry on
         if not files_in_directory:
-            os.chdir(video_directory)
+            os.chdir(directory)
             continue
         
         # select random item in working directory for review
@@ -77,12 +76,12 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
         # if the file is in disallowed_files, return to the video directory and restart the loop,
         # otherwise carry on
         if os.path.abspath(potential_item) in disallowed_files:
-            os.chdir(video_directory)
+            os.chdir(directory)
             continue
         # if the file is not in allowed_extensions, return to the video directory and restart the loop, 
         # otherwise carry on
         if os.path.splitext(potential_item)[-1].lower() not in allowed_extensions:
-            os.chdir(video_directory)
+            os.chdir(directory)
             continue
         # if no previous checks fail, return the file
         return potential_item
@@ -105,7 +104,7 @@ def main_loop():
             QUEUE.pop(0)
             update_queue_text()
         else:
-            chosen_video = get_random_file(VIDEO_DIRECTORY_CYCLE[current_video_directory], ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS)
+            chosen_video = get_random_file(os.path.join(SCRIPT_ROOT, VIDEO_DIRECTORY_CYCLE[current_video_directory]), ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS)
 
         # if there is an active video thread, wait until it ends to continue
         if VIDEO_PLAYER_THREAD:
