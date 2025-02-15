@@ -38,7 +38,7 @@ QUEUE = []
 QUEUE_TEXT = ""
 VIDEO_DIRECTORY_CYCLE_TEXT = None
 RECENTLY_PLAYED_VIDEOS = []
-RECENTLY_PLAYED_VIDEOS_TEXT = None
+RECENTLY_PLAYED_MAIN_VIDEOS_TEXT = None
 
 def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
     '''
@@ -143,7 +143,7 @@ def update_video_directory_cycle_text():
     VIDEO_DIRECTORY_CYCLE_TEXT.config(text=', '.join(VIDEO_DIRECTORY_CYCLE))
 
 def update_recently_played_videos_text():
-    RECENTLY_PLAYED_VIDEOS_TEXT.config(text='\n'.join(RECENTLY_PLAYED_VIDEOS[-5:][::-1]))
+    RECENTLY_PLAYED_MAIN_VIDEOS_TEXT.config(text='\n'.join(RECENTLY_PLAYED_VIDEOS[-5:][::-1]))
 
 def create_control_panel():
     '''create the window to control fauxble'''
@@ -192,12 +192,12 @@ def create_control_panel():
     update_video_directory_cycle_text()
     VIDEO_DIRECTORY_CYCLE_TEXT.grid(column=0, row=3)
     # recently played videos information
-    recently_played_videos_label = tkinter.Label(information_frame, text="Recently Played Videos")
-    recently_played_videos_label.grid(column=0, row=4)
-    global RECENTLY_PLAYED_VIDEOS_TEXT
-    RECENTLY_PLAYED_VIDEOS_TEXT = tkinter.Label(information_frame)
+    recently_played_main_videos_label = tkinter.Label(information_frame, text="Recently Played Main Videos")
+    recently_played_main_videos_label.grid(column=0, row=4)
+    global RECENTLY_PLAYED_MAIN_VIDEOS_TEXT
+    RECENTLY_PLAYED_MAIN_VIDEOS_TEXT = tkinter.Label(information_frame)
     update_recently_played_videos_text()
-    RECENTLY_PLAYED_VIDEOS_TEXT.grid(column=0, row=5)
+    RECENTLY_PLAYED_MAIN_VIDEOS_TEXT.grid(column=0, row=5)
 
     root.mainloop()
 
