@@ -144,8 +144,9 @@ def main_loop():
         # if fauxble is active, play the chosen video
         if FAUXBLE_ACTIVE:
             general_logger.info('playing ' + chosen_video + '.')
-            video_logger.info(chosen_video)
-            VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [chosen_video], creationflags=subprocess.CREATE_NO_WINDOW)
+            if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0]:
+                video_logger.info(chosen_video)
+            VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS, creationflags=subprocess.CREATE_NO_WINDOW)
 
         # if the video directory is the same as the first in the video directory, 
         # add the last played video to the recently played videos
