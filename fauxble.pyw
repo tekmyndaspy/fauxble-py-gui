@@ -13,15 +13,18 @@ import tkinter.filedialog
 import logging
 
 # instantiate loggers
+# most lines are commented out while not testing to not create unnecessary files, 
+# though the creation of the loggers themselves is left in to not cause errors with later logging statements
 general_logger = logging.getLogger('general_logger')
-general_log_handle = logging.FileHandler('fauxble.log')
-general_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
-general_logger.addHandler(general_log_handle)
+# general_log_handle = logging.FileHandler('fauxble.log', encoding='utf-8')
+# general_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
+# general_logger.addHandler(general_log_handle)
+# general_logger.setLevel(logging.CRITICAL)
 
 video_logger = logging.getLogger('video_logger')
-video_log_handle = logging.FileHandler('videos.log')
-video_logger.addHandler(video_log_handle)
-video_logger.setLevel
+# video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
+# video_logger.addHandler(video_log_handle)
+# video_logger.setLevel(logging.CRITICAL)
 
 # fauxble default settings
 # it is recommended to use a separate fauxble_settings.py file within the same 
