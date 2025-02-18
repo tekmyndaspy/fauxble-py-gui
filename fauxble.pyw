@@ -22,9 +22,9 @@ general_logger.addHandler(general_log_handle)
 general_logger.setLevel(logging.WARNING)
 
 video_logger = logging.getLogger('video_logger')
-#video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
-#video_logger.addHandler(video_log_handle)
-#video_logger.setLevel(logging.INFO)
+video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
+video_logger.addHandler(video_log_handle)
+video_logger.setLevel(logging.INFO)
 
 # fauxble default settings
 # it is recommended to use a separate fauxble_settings.py file within the same 
