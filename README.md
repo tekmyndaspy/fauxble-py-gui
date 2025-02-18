@@ -62,6 +62,3 @@ Fauxble Root
 - include ways to change behavior on launch, such as with launch arguments (such as previous behavior where a gui is not required)
   - in this case, add way to add videos to queue through script (is this even possible?)
 - add check for certain prefix of videos to stop them from playing
-
-# To Do List:
-"The way to shorten the time between videos would probably just be to run the logic for deciding the next filepath when a file starts playing instead of when a file finishes, that way the program simply has to wait for the current file to end and then it can instantly open the next one instead of running the logic to decide what to play next at that exact moment."
