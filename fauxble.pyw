@@ -23,6 +23,7 @@ general_logger.setLevel(logging.WARNING)
 
 video_logger = logging.getLogger('video_logger')
 video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
+video_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
 video_logger.addHandler(video_log_handle)
 video_logger.setLevel(logging.INFO)
 
