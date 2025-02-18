@@ -31,7 +31,7 @@ video_logger = logging.getLogger('video_logger')
 # directory as this file if you wish to change these settings
 # these settings will be set back to the defaults upon updating, as this file will be overwritten
 general_logger.info('setting default settings')
-ALLOWED_EXTENSIONS = ['.mp4', '.webm', '.mkv']
+ALLOWED_EXTENSIONS = ['.mp4', '.mkv', '.webm']
 VIDEO_PLAYER = 'mpv'
 VIDEO_PLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loudnorm']
 VIDEO_DIRECTORY_CYCLE = ['Main', 'Intermediary']
