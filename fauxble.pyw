@@ -249,3 +249,4 @@ if __name__ == '__main__':
     if VIDEO_PLAYER_THREAD:
         general_logger.info('fauxble not stopped before closing control panel. stopping fauxble.')
         terminate_main_loop()
+    general_logger.info('fauxble has been shut down.')
