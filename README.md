@@ -14,8 +14,8 @@ There are a couple options, but I would personally recommend using git for insta
 
 
 # To Use:
-1. Place main video files in a folder named 'Main' or subfolders of the previously mentioned 'Main' folder
-2. Place intermediary video files in a folder named 'Intermediary' or subfolders of the previously mentioned 'Intermediary' folder
+1. Place main video files in a folder named `Main` or subfolders of the previously mentioned `Main` folder
+2. Place intermediary video files in a folder named `Intermediary` or subfolders of the previously mentioned `Intermediary` folder
 4. Run fauxble.pyw
 
 # Optional Actions:
