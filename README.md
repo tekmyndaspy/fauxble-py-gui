@@ -37,15 +37,16 @@ Fauxble Root
 # To Close:
 1. Close the GUI window that opens upon launching the fauxble.pyw script
 
+# Things to Know:
+- two files will be created, videos.log and fauxble.log
+  - fauxble.log records general actions performed by the program
+  - videos.log records the videos played by fauxble
+
 # Functionality Planned for the Future:
 - possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
 - include ways to change behavior on launch, such as with launch arguments (such as previous behavior where a gui is not required)
   - in this case, add way to add videos to queue through script (is this even possible?)
 - add check for certain prefix of videos to stop them from playing
-
-# Other Notes:
-fauxble.pyw is commented quite a bit. near the top of the file are variables to allow one to set the video player to be used and the file types that are accepted
-by default, fauxble uses mpv and accepts mp4, webm, and mkv files
 
 # To Do List:
 "The way to shorten the time between videos would probably just be to run the logic for deciding the next filepath when a file starts playing instead of when a file finishes, that way the program simply has to wait for the current file to end and then it can instantly open the next one instead of running the logic to decide what to play next at that exact moment."
