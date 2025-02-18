@@ -56,9 +56,3 @@ Fauxble Root
 - two files will be created, videos.log and fauxble.log
   - `fauxble.log` records general actions performed by the program
   - `videos.log` records the videos played by fauxble
-
-# Functionality Planned for the Future:
-- possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
-- include ways to change behavior on launch, such as with launch arguments (such as previous behavior where a gui is not required)
-  - in this case, add way to add videos to queue through script (is this even possible?)
-- add check for certain prefix of videos to stop them from playing
