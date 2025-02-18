@@ -19,9 +19,12 @@ There are a couple options, but I would personally recommend using git for insta
 4. Run fauxble.pyw
 
 # Optional Actions:
-- You can create a file fauxble_settings.py which may contain variables and values to be used by fauxble.pyw
-  - You should be careful to only use variables spcified in the "fauxble user-definable settings" section in fauxble.pyw, and only in a similar format
-  - The benefit of using the fauxble_settings.py file as opposed to changing the settings in the main file is that they will not be wiped out upon updating fauxble
+- You can create a file `fauxble_settings.py` which may contain variables and values to be used by `fauxble.pyw`
+  - You should be careful to only use variables spcified in the "fauxble user-definable settings" section in `fauxble.pyw`, and only in a similar format
+  - The benefit of using the `fauxble_settings.py` file as opposed to changing the settings in the main file is that they will not be wiped out upon updating fauxble
+- You may use different folder names for the main or intermediary folders (or even use a different hierarchy alltogether)
+  - If you do this, it's advisable to place the names in `fauxble_settings.py` as a list, such as `VIDEO_DIRECTORY_CYCLE = ['Main', 'Intermediary']`
+  - You may have any number of directories in the video directory cycle, so long as there is one or more
 
 # Example Directory Tree:
 
