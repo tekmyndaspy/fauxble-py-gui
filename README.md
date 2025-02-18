@@ -54,5 +54,5 @@ Fauxble Root
 
 # Things to Know:
 - two files will be created, videos.log and fauxble.log
-  - `fauxble.log` records general actions performed by the program
-  - `videos.log` records the videos played by fauxble
+  - `fauxble.log` records general actions performed by the program and by default is set to a warning level
+  - `videos.log` records the videos played by fauxble and by default is set to an info level
