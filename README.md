@@ -1,6 +1,18 @@
 # fauxble-py
 A program to automatically alternate between playing videos from folders in a main folder and videos in an intermediary folder
 
+# To Install:
+There are a couple options, but I would personally recommend using git for installation as this will allow for easy updating.
+
+- git (you must have git installed to use this method; i also recommend some knowledge with git to begin with)
+1. Run `git clone https://github.com/tekmyndaspy/fauxble-py-gui` in the directory you want the fauxble-py-gui folder to be in.
+
+- Manual Installation (`update.bat` will not work if this method is used)
+1. Click the green 'Code' button near the top of the repository.
+2. Click 'Download ZIP'.
+3. Extract the `fauxble-py-gui-main` folder to the folder of your choice.
+
+
 # To Use:
 1. Place main video files in a folder named 'Main' or subfolders of the previously mentioned 'Main' folder
 2. Place intermediary video files in a folder named 'Intermediary' or subfolders of the previously mentioned 'Intermediary' folder
