@@ -16,10 +16,10 @@ import logging
 # most lines are commented out while not testing to not create unnecessary files, 
 # though the creation of the loggers themselves is left in to not cause errors with later logging statements
 general_logger = logging.getLogger('general_logger')
-# general_log_handle = logging.FileHandler('fauxble.log', encoding='utf-8')
-# general_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
-# general_logger.addHandler(general_log_handle)
-# general_logger.setLevel(logging.WARNING)
+general_log_handle = logging.FileHandler('fauxble.log', encoding='utf-8')
+general_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
+general_logger.addHandler(general_log_handle)
+general_logger.setLevel(logging.WARNING)
 
 video_logger = logging.getLogger('video_logger')
 #video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
