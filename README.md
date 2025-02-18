@@ -50,12 +50,12 @@ Fauxble Root
 ```
 
 # To Close:
-1. Close the GUI window that opens upon launching the fauxble.pyw script
+1. Close the GUI window that opens upon launching the `fauxble.pyw` script
 
 # Things to Know:
 - two files will be created, videos.log and fauxble.log
-  - fauxble.log records general actions performed by the program
-  - videos.log records the videos played by fauxble
+  - `fauxble.log` records general actions performed by the program
+  - `videos.log` records the videos played by fauxble
 
 # Functionality Planned for the Future:
 - possibly integrate mpv into the gui itself (may make application less portable, though an installation of mpv is already required)
