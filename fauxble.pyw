@@ -79,7 +79,7 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
         # if the working directory has no items, return to the video directory and restart the loop, 
         # otherwise carry on
         if not files_in_directory:
-            general_logger.warning('no files in ' + os.curdir() + '. is this intentional? moving to ' + directory + ' and restarting search.')
+            general_logger.warning('no files in ' + os.curdir + '. is this intentional? moving to ' + directory + ' and restarting search.')
             os.chdir(directory)
             continue
         
