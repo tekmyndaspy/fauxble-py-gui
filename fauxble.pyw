@@ -75,16 +75,16 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
     # loop through directory
     file_is_chosen = False
     while not file_is_chosen:
-        files_in_directory = os.listdir()
+        items_in_directory = os.listdir()
         # if the working directory has no items, return to the video directory and restart the loop, 
         # otherwise carry on
-        if not files_in_directory:
+        if not items_in_directory:
             general_logger.warning('no files in ' + os.curdir + '. is this intentional? moving to ' + directory + ' and restarting search.')
             os.chdir(directory)
             continue
         
         # select random item in working directory for review
-        potential_item = random.choice(files_in_directory)
+        potential_item = random.choice(items_in_directory)
         general_logger.info('selected ' + potential_item + ' for review.')
         
         # if the item is a directory, enter the directory and restart the loop, 
