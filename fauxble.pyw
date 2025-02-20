@@ -19,19 +19,25 @@ general_logger = logging.getLogger('general_logger')
 general_log_handle = logging.FileHandler('fauxble.log', encoding='utf-8')
 general_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
 general_logger.addHandler(general_log_handle)
+general_stdout_handle = logging.StreamHandler(stream=sys.stdout)
+general_stdout_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
+general_logger.addHandler(general_stdout_handle)
 general_logger.setLevel(logging.INFO)
 
 video_logger = logging.getLogger('video_logger')
 video_log_handle = logging.FileHandler('videos.log', encoding='utf-8')
 video_log_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
 video_logger.addHandler(video_log_handle)
+video_stdout_handle = logging.StreamHandler(stream=sys.stdout)
+video_stdout_handle.setFormatter(logging.Formatter("[%(asctime)s] %(name)s: %(levelname)s, %(message)s"))
+video_logger.addHandler(general_stdout_handle)
 video_logger.setLevel(logging.INFO)
 
 # fauxble default settings
 # it is recommended to use a separate fauxble_settings.py file within the same 
 # directory as this file if you wish to change these settings
 # these settings will be set back to the defaults upon updating, as this file will be overwritten
-general_logger.info('setting default settings')
+general_logger.info('setting default settings.')
 ALLOWED_EXTENSIONS = ['.mp4', '.mkv', '.webm']
 VIDEO_PLAYER = 'mpv'
 VIDEO_PLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loudnorm']
@@ -46,11 +52,11 @@ except ModuleNotFoundError:
     general_logger.warning('failed to import fauxble_settings.py. this may or may not be important.')
 
 # script constants
-general_logger.debug('creating script root constant')
+general_logger.debug('creating script root constant.')
 SCRIPT_ROOT = sys.path[0]
 
 # globals for communication between threads
-general_logger.debug('create commuincation variables')
+general_logger.debug('creating inter-thread commuincation variables.')
 VIDEO_PLAYER_THREAD = None
 FAUXBLE_ACTIVE = False
 QUEUE = []
@@ -128,12 +134,12 @@ def main_loop():
         # if there is a video on the video queue, choose the first video on the queue then remove that video from the queue, 
         # otherwise choose a random video from the current video directory
         if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0] and QUEUE:
-            general_logger.info('there is a video on the video queue. selecting first video on the queue for playback, then removing it from the queue.')
+            general_logger.info('video on queue . selecting first video on the queue for playback, then removing.')
             chosen_video = QUEUE[0]
             QUEUE.pop(0)
             update_queue_text()
         else:
-            general_logger.info('no video is on the queue. selecting random file from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
+            general_logger.info('selecting random file from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
             chosen_video = get_random_file(os.path.join(SCRIPT_ROOT, VIDEO_DIRECTORY_CYCLE[current_video_directory]), ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS)
             general_logger.info('selected ' + chosen_video + ' from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
 
@@ -145,21 +151,20 @@ def main_loop():
         # if fauxble is active, play the chosen video
         if FAUXBLE_ACTIVE:
             general_logger.info('playing ' + chosen_video + '.')
-            if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0]:
-                video_logger.info('playing ' + os.path.abspath(chosen_video) + '.')
+            video_logger.info('playing ' + os.path.abspath(chosen_video) + '.')
             VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [chosen_video], creationflags=subprocess.CREATE_NO_WINDOW)
 
         # if the video directory is the same as the first in the video directory, 
         # add the last played video to the recently played videos
         if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0]:
-            general_logger.info('main video directory cycle')
+            general_logger.info('adding ' + chosen_video + ' to recently played videos.')
             RECENTLY_PLAYED_VIDEOS.append(os.path.abspath(chosen_video))
             update_recently_played_videos_text()
 
         # if the number of videos is greater than acceptable in the recently played videos list
         # remove enough videos from the list until it is within an acceptable range
         if len(RECENTLY_PLAYED_VIDEOS) > VIDEOS_UNTIL_REPLAY - 1:
-            general_logger.info('the number of items in the recently played videos list is higher than it should be. removing enough such that it is under the limit.')
+            general_logger.info('removing items from recently played videos to set it within bounds.')
             del RECENTLY_PLAYED_VIDEOS[0:len(RECENTLY_PLAYED_VIDEOS) - VIDEOS_UNTIL_REPLAY]
             update_recently_played_videos_text()
 
@@ -245,6 +250,7 @@ def create_control_panel():
 
 if __name__ == '__main__':
     # create the fauxble control panel
+    general_logger.info('starting fauxble control panel.')
     create_control_panel()
     # terminate any left over video players if the window was closed without stopping fauxble first
     if VIDEO_PLAYER_THREAD:
