@@ -66,7 +66,7 @@ VIDEO_DIRECTORY_CYCLE_TEXT = None
 RECENTLY_PLAYED_VIDEOS = []
 RECENTLY_PLAYED_MAIN_VIDEOS_TEXT = None
 
-def get_random_file(directory, allowed_extensions=[], disallowed_files=[], disallowed_prefix=''):
+def get_random_file(directory, allowed_extensions=['*'], disallowed_files=[], disallowed_prefix=''):
     '''
     returns a random file from the specified directory that satisfies the 
     specified allowed extensions.
@@ -117,7 +117,7 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[], disal
             continue
         # if the file is not in allowed_extensions, return to the video directory and restart the loop, 
         # otherwise carry on
-        if os.path.splitext(potential_item)[-1].lower() not in allowed_extensions:
+        if os.path.splitext(potential_item)[-1].lower() not in allowed_extensions or allowed_extensions == ['*']:
             general_logger.warning(potential_item + ' extension not in ' + ','.join(allowed_extensions) + '. restarting from ' + directory + '.')
             os.chdir(directory)
             continue
