@@ -66,7 +66,7 @@ VIDEO_DIRECTORY_CYCLE_TEXT = None
 RECENTLY_PLAYED_VIDEOS = []
 RECENTLY_PLAYED_MAIN_VIDEOS_TEXT = None
 
-def get_random_file(directory, allowed_extensions=['*'], disallowed_files=[], disallowed_prefix=''):
+def get_random_file(directory, allowed_extensions=['*'], disallowed_directories=[], disallowed_files=[], disallowed_prefix=''):
     '''
     returns a random file from the specified directory that satisfies the 
     specified allowed extensions.
