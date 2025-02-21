@@ -156,6 +156,13 @@ def main_loop():
             general_logger.info('there is currently a playing video. waiting until it ends to play selected video.')
             VIDEO_PLAYER_THREAD.wait()
 
+        # if fauxble is active and there is an UP_NEXT video file for the corresponding chosen_video, play that
+        if FAUXBLE_ACTIVE and "!DISABLED_UP_NEXT.mp4" in os.listdir(os.path.dirname(chosen_video)):
+            general_logger.info('playing up next video for ' + chosen_video + '.')
+            video_logger.info('playing UP_NEXT.mp4 in ' + os.path.dirname(chosen_video) + '.')
+            VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [os.path.join(os.path.dirname(chosen_video), '!DISABLED_UP_NEXT.mp4')], creationflags=subprocess.CREATE_NO_WINDOW)
+            VIDEO_PLAYER_THREAD.wait()
+
         # if fauxble is active, play the chosen video
         if FAUXBLE_ACTIVE:
             general_logger.info('playing ' + chosen_video + '.')
