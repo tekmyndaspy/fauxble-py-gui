@@ -44,6 +44,8 @@ VIDEO_PLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loud
 VIDEO_DIRECTORY_CYCLE = ['Main', 'Intermediary']
 VIDEOS_UNTIL_REPLAY = 48
 DISALLOWED_PREFIX = 'DISABLED_'
+UP_NEXT_DIRECTORY = 'UP_NEXT'
+DISALLOWED_DIRECTORIES = ['UP_NEXT']
 
 # overwrite defaults with user defined settings, if applicable
 try:
@@ -154,12 +156,26 @@ def main_loop():
             update_queue_text()
         else:
             general_logger.info('selecting random file from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
-            chosen_video = get_random_file(os.path.join(SCRIPT_ROOT, VIDEO_DIRECTORY_CYCLE[current_video_directory]), ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS, DISALLOWED_PREFIX)
+            chosen_video = get_random_file(directory=os.path.join(SCRIPT_ROOT, VIDEO_DIRECTORY_CYCLE[current_video_directory]), 
+                                           allowed_extensions=ALLOWED_EXTENSIONS, 
+                                           disallowed_files=RECENTLY_PLAYED_VIDEOS, 
+                                           disallowed_prefix=DISALLOWED_PREFIX,
+                                           disallowed_directories=DISALLOWED_DIRECTORIES)
             general_logger.info('selected ' + chosen_video + ' from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
 
         # if there is an active video thread, wait until it ends to continue
         if VIDEO_PLAYER_THREAD:
             general_logger.info('there is currently a playing video. waiting until it ends to play selected video.')
+            VIDEO_PLAYER_THREAD.wait()
+
+        # if fauxble is active and there is an UP_NEXT video file for the corresponding chosen_video, play that
+        if FAUXBLE_ACTIVE and UP_NEXT_DIRECTORY in os.listdir(os.path.dirname(chosen_video)):
+            general_logger.info('there is an up next directory associated with the chosen file. choosing random video from ' + os.path.join(os.path.dirname(chosen_video), UP_NEXT_DIRECTORY) + '.')
+            up_next_video = get_random_file(os.path.join(os.path.dirname(chosen_video), UP_NEXT_DIRECTORY), allowed_extensions=ALLOWED_EXTENSIONS, disallowed_prefix=DISALLOWED_PREFIX)
+            general_logger.info('chose ' + up_next_video + ' for playback as the up next video.')
+            general_logger.info('playing ' + up_next_video + '.')
+            VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [os.path.join(os.path.dirname(chosen_video), up_next_video)], 
+                                                   creationflags=subprocess.CREATE_NO_WINDOW)
             VIDEO_PLAYER_THREAD.wait()
 
         # if fauxble is active, play the chosen video
