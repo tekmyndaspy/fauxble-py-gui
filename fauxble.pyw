@@ -94,6 +94,12 @@ def get_random_file(directory, allowed_extensions=['*'], disallowed_files=[], di
         potential_item = os.path.abspath(random.choice(items_in_directory))
         general_logger.info('selected ' + potential_item + ' for review.')
         
+        # if the item is a directory and is in disallowed_directories, return to the video directory and restart the loop
+        if potential_item in disallowed_directories:
+            general_logger.info(potential_item + ' in disallowed directories. restarting search from ' + directory + '.')
+            os.chdir(directory)
+            continue
+
         # if the item is a directory, enter the directory and restart the loop, 
         # otherwise carry on
         if os.path.isdir(potential_item):
