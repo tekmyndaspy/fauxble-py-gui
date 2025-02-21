@@ -91,7 +91,7 @@ def get_random_file(directory, allowed_extensions=['*'], disallowed_files=[], di
             continue
         
         # select random item in working directory for review
-        potential_item = random.choice(items_in_directory)
+        potential_item = os.path.abspath(random.choice(items_in_directory))
         general_logger.info('selected ' + potential_item + ' for review.')
         
         # if the item is a directory, enter the directory and restart the loop, 
