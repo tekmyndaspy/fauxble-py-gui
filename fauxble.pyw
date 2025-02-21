@@ -174,6 +174,7 @@ def main_loop():
             up_next_video = get_random_file(os.path.join(os.path.dirname(chosen_video), UP_NEXT_DIRECTORY), allowed_extensions=ALLOWED_EXTENSIONS, disallowed_prefix=DISALLOWED_PREFIX)
             general_logger.info('chose ' + up_next_video + ' for playback as the up next video.')
             general_logger.info('playing ' + up_next_video + '.')
+            video_logger.info('playing ' + up_next_video + '.')
             VIDEO_PLAYER_THREAD = subprocess.Popen([VIDEO_PLAYER] + VIDEO_PLAYER_FLAGS + [os.path.join(os.path.dirname(chosen_video), up_next_video)], 
                                                    creationflags=subprocess.CREATE_NO_WINDOW)
             VIDEO_PLAYER_THREAD.wait()
