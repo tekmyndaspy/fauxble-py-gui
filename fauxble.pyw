@@ -43,6 +43,7 @@ VIDEO_PLAYER = 'mpv'
 VIDEO_PLAYER_FLAGS = ['--no-config', '--terminal=no', '--fullscreen', '--af=loudnorm']
 VIDEO_DIRECTORY_CYCLE = ['Main', 'Intermediary']
 VIDEOS_UNTIL_REPLAY = 48
+DISALLOWED_PREFIX = 'DISABLED_'
 
 # overwrite defaults with user defined settings, if applicable
 try:
@@ -65,7 +66,7 @@ VIDEO_DIRECTORY_CYCLE_TEXT = None
 RECENTLY_PLAYED_VIDEOS = []
 RECENTLY_PLAYED_MAIN_VIDEOS_TEXT = None
 
-def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
+def get_random_file(directory, allowed_extensions=[], disallowed_files=[], disallowed_prefix=''):
     '''
     returns a random file from the specified directory that satisfies the 
     specified allowed extensions.
@@ -108,12 +109,19 @@ def get_random_file(directory, allowed_extensions=[], disallowed_files=[]):
             general_logger.info(potential_item + ' in disallowed files. restarting search from ' + directory + '.')
             os.chdir(directory)
             continue
+        # if the file has a disallowed prefix, return to the video directory and restart the loop,
+        # otherwise carry on
+        if potential_item.startswith(disallowed_prefix):
+            general_logger.info(potential_item + ' has disallowed prefix. restarting search from ' + directory + '.')
+            os.chdir(directory)
+            continue
         # if the file is not in allowed_extensions, return to the video directory and restart the loop, 
         # otherwise carry on
         if os.path.splitext(potential_item)[-1].lower() not in allowed_extensions:
             general_logger.warning(potential_item + ' extension not in ' + ','.join(allowed_extensions) + '. restarting from ' + directory + '.')
             os.chdir(directory)
             continue
+
         # if no previous checks fail, return the file
         general_logger.info(potential_item + ' passed all checks. returning file.')
         return potential_item
@@ -140,7 +148,7 @@ def main_loop():
             update_queue_text()
         else:
             general_logger.info('selecting random file from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
-            chosen_video = get_random_file(os.path.join(SCRIPT_ROOT, VIDEO_DIRECTORY_CYCLE[current_video_directory]), ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS)
+            chosen_video = get_random_file(os.path.join(SCRIPT_ROOT, VIDEO_DIRECTORY_CYCLE[current_video_directory]), ALLOWED_EXTENSIONS, RECENTLY_PLAYED_VIDEOS, DISALLOWED_PREFIX)
             general_logger.info('selected ' + chosen_video + ' from ' + VIDEO_DIRECTORY_CYCLE[current_video_directory] + '.')
 
         # if there is an active video thread, wait until it ends to continue
