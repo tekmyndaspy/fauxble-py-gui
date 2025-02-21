@@ -150,7 +150,7 @@ def main_loop():
         # if there is a video on the video queue, choose the first video on the queue then remove that video from the queue, 
         # otherwise choose a random video from the current video directory
         if VIDEO_DIRECTORY_CYCLE[current_video_directory] == VIDEO_DIRECTORY_CYCLE[0] and QUEUE:
-            general_logger.info('video on queue . selecting first video on the queue for playback, then removing.')
+            general_logger.info('video on queue. selecting first video on the queue for playback, then removing.')
             chosen_video = QUEUE[0]
             QUEUE.pop(0)
             update_queue_text()
